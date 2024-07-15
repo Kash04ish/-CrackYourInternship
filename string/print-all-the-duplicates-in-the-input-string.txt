@@ -1,0 +1,11 @@
+void printDups(string str){
+    unordered_map<char, int> mp;
+    for (int i = 0; i < str.length(); i++) {
+        mp[str[i]]++;
+    }
+    // iterating through the unordered map
+    for (auto it : mp) {
+        if (it.second > 1)
+            cout << it.second << "\n";
+    }
+}
