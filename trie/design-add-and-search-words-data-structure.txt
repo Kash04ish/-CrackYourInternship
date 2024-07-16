@@ -1,0 +1,54 @@
+class WordDictionary {
+private:
+    WordDictionary* children[26] = {nullptr};  // Array to hold child nodes for each character
+    bool isEndOfWord = false;  // Flag to indicate end of a word
+
+public:
+    WordDictionary() {}
+
+    void addWord(string word) {
+        WordDictionary* current = this;
+        for (char ch : word) {
+            int index = ch - 'a';  // Convert character to index
+            if (!current->children[index]) {
+                current->children[index] = new WordDictionary();  // Create new node if it doesn't exist
+            }
+            current = current->children[index];  // Move to the next node
+        }
+        current->isEndOfWord = true;
+    }
+    
+    bool search(string word) {
+        return searchRecursive(word, 0);
+    }
+
+private:
+    bool searchRecursive(const string& word, int index) {
+        if (index == word.size()) {
+            return isEndOfWord;
+        }
+
+        char ch = word[index];
+        if (ch == '.') {
+            for (int i = 0; i < 26; ++i) {
+                if (children[i] && children[i]->searchRecursive(word, index + 1)) {
+                    return true;
+                }
+            }
+            return false;
+        } else {
+            int charIndex = ch - 'a';
+            if (!children[charIndex]) {
+                return false;
+            }
+            return children[charIndex]->searchRecursive(word, index + 1);
+        }
+    }
+};
+
+/**
+ * Your WordDictionary object will be instantiated and called as such:
+ * WordDictionary* obj = new WordDictionary();
+ * obj->addWord(word);
+ * bool param_2 = obj->search(word);
+ */
