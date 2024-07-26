@@ -1,0 +1,66 @@
+class Solution {
+public:
+    vector<vector<int>> threeSum(vector<int>& nums) {
+    vector<vector<int>> ans;
+
+    sort(nums.begin(), nums.end());
+
+    for (int i = 0; i < nums.size() - 2; i++) {
+        if (i > 0 && nums[i] == nums[i - 1])
+            continue;
+
+        int target = -nums[i];
+        int left = i + 1;
+        int right = nums.size() - 1;
+
+        while (left < right) {
+            int sum = nums[left] + nums[right];
+
+            if (sum == target) {
+                ans.push_back({nums[i], nums[left], nums[right]});
+                while (left < right && nums[left] == nums[left + 1])
+                    left++;
+                while (left < right && nums[right] == nums[right - 1])
+                    right--;
+                left++;
+                right--;
+            } else if (sum < target) {
+                left++;
+            } else {
+                right--;
+            }
+        }
+    }
+
+    // Sorting the entire vector of triplets
+    sort(ans.begin(), ans.end());
+
+    // Removing duplicates
+    ans.erase(unique(ans.begin(), ans.end()), ans.end());
+
+    return ans;    
+    }
+};
+//wrong ans->17th test case [0,0,0,0]
+// vector<vector<int>> ans;
+//         for(int i=0; i<nums.size(); i++){
+//             for(int j=i+1; j<nums.size(); j++){
+//                 for(int k=j+1; k<nums.size(); k++){
+//                     if((nums[i]+nums[j]+nums[k])==0)
+//                         ans.push_back({nums[i], nums[j], nums[k]}); 
+                        
+//                 }
+//             }
+//         }
+
+// //does not consider same inputs with different indices
+//         for(int i=0; i<ans.size(); i++)
+//         sort(ans[i].begin(), ans[i].end());
+        
+//         for(int i=1; i<ans.size(); i++){
+//             for(int j=0; j<ans.size(); j++){
+//             if(ans[i-1][j]==ans[i][j])  ans.pop_back();
+//             else continue;
+//             }
+//         }
+//         return ans;

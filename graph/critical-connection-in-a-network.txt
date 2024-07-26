@@ -1,0 +1,37 @@
+class Solution {
+private:
+    int timer = 1;
+    void dfsFindBridges(int src, int parent, unordered_map<int, bool>& visited, vector<int> adj[], int tin[], int low[], vector<vector<int>>& bridges){
+        visited[src] = true;
+        tin[src] = low[src] = timer;
+        timer++;
+        for(auto nbr: adj[src]){
+            if(nbr == parent) continue;
+            if(!visited[nbr]){
+                dfsFindBridges(nbr, src, visited, adj, tin, low, bridges);
+                low[src] = min(low[src], low[nbr]);
+                if(low[nbr] > tin[src]){
+                    bridges.push_back({src, nbr});
+                }
+            }
+            else low[src] = min(low[src], low[nbr]);
+        }
+    }
+public:
+    vector<vector<int>> criticalConnections(int n, vector<vector<int>>& connections) {
+        vector<int> adj[n];
+        for(auto i: connections){
+            int u = i[0];
+            int v = i[1];
+            adj[u].push_back(v);
+            adj[v].push_back(u);
+        }
+        unordered_map<int, bool> visited;
+        int tin[n];
+        int low[n];
+        vector<vector<int>> bridges;
+        dfsFindBridges(0, -1, visited, adj, tin, low, bridges);
+
+        return bridges;
+    }
+};

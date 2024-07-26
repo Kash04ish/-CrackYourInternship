@@ -1,0 +1,38 @@
+bool isPossible(int N,int P, vector<pair<int, int> >& prerequisites) {
+	vector<int> indegree(N, 0); // Vector to keep track of the incoming edges count for each node
+    vector<vector<int>> graph(N); // Graph to keep track of each node and its neighbors
+
+    // Building the graph and updating the indegree of each node
+    for (auto req : prerequisites) {
+        int from = req.first;
+        int to = req.second;
+        graph[from].push_back(to); // Pushing neighbors for each node
+        indegree[to]++; // Incrementing the incoming edges count
+    }
+
+    queue<int> q;
+    // Adding nodes with zero indegree to the queue
+    for (int i = 0; i < N; i++) {
+        if (indegree[i] == 0) {
+            q.push(i);
+        }
+    }
+
+    int nodesTraversed = 0; // Count of how many courses completed
+    while (!q.empty()) {
+        int node = q.front();
+        q.pop();
+        nodesTraversed++; // One course completed
+
+        // Visiting all the neighbors of the current node
+        for (int nei : graph[node]) {
+            indegree[nei]--; // Decrease the indegree of the neighbor
+            if (indegree[nei] == 0) {
+                q.push(nei); // If the neighbor has no other prerequisites, add it to the queue
+            }
+        }
+    }
+
+    // If the number of nodes traversed equals the number of courses, it means we can complete all courses
+    return nodesTraversed == N;
+	}

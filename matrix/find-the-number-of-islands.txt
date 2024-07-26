@@ -1,0 +1,33 @@
+ void solve(int x, int y, int rows, int cols, vector<vector<char>>& grid){
+        if(x<0 || y<0 || x >=rows || y >=cols || grid[x][y] != '1')
+            return;
+        
+         grid[x][y] = '2';
+        
+         solve(x+1, y, rows, cols, grid);
+         solve(x, y+1, rows, cols, grid);
+         solve(x-1, y, rows, cols, grid);
+         solve(x, y-1, rows, cols, grid);
+         solve(x+1, y+1, rows, cols, grid);
+         solve(x-1, y-1, rows, cols, grid);
+         solve(x+1, y-1, rows, cols, grid);
+         solve(x-1, y+1, rows, cols, grid);
+    }
+    
+    
+    int numIslands(vector<vector<char>>& grid) {
+        int rows = grid.size();
+        if(rows == 0) return 0;
+        int cols = grid[0].size();
+        
+        int noOfIsland =  0;
+        for(int i=0; i<rows; i++){
+            for(int j=0; j<cols; j++){
+                if(grid[i][j] =='1'){
+                    solve(i, j, rows, cols, grid);
+                    noOfIsland += 1;
+                }
+            }   
+        }
+        return noOfIsland;
+    }

@@ -1,0 +1,32 @@
+class Solution {
+public:
+    vector<vector<string>> groupAnagrams(vector<string>& strs) {
+        map<string, vector<string>> mp;
+        for(auto str: strs){
+            string s = str;
+            sort(s.begin(), s.end());
+            mp[s].push_back(str);
+        }
+        vector<vector<string>> ans;
+        for(auto it = mp.begin(); it!=mp.end(); it++){
+            ans.push_back(it->second);
+        }
+        return ans;
+    }
+};
+// vector<string> sortedString;
+//         for(int i=0; i<strs.size(); i++) {
+//             string s = strs[i];
+//             sort(s.begin(), s.end());
+//             sortedString.push_back(s);
+//         }
+//         vector<vector<string>> ans;
+//         if(strs.size()==0) return {};
+//         if(strs.size()==1) ans.push_back({strs[0]});
+// map nhi create kiya toh sorted string ja rha also keval ek hi type ka anagram store ho rha
+//         for(int i=0; i<strs.size()-1; i++){
+//             if(sortedString[i] == sortedString[i+1]){
+//             ans.push_back({sortedString[i], sortedString[i+1]});
+//             }
+//         }
+//         return ans;
