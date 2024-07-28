@@ -1,0 +1,68 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    bool isPalindrome(ListNode* head) {
+    ListNode* slow = head;
+    ListNode* fast = head;
+
+    // Find the middle of the linked list using slow and fast pointers
+    while (fast != nullptr && fast->next != nullptr) {
+        slow = slow->next;
+        fast = fast->next->next;
+    }
+
+    // Reverse the second half of the linked list
+    ListNode* prev = nullptr;
+    ListNode* curr = slow;
+
+    while (curr != nullptr) {
+        ListNode* nextNode = curr->next;
+        curr->next = prev;
+        prev = curr;
+        curr = nextNode;
+    }
+
+    // Compare the reversed second half with the first half
+    ListNode* firstHalf = head;
+    ListNode* secondHalf = prev;
+
+    while (secondHalf != nullptr) {
+        if (firstHalf->val != secondHalf->val) {
+            return false;
+        }
+        firstHalf = firstHalf->next;
+        secondHalf = secondHalf->next;
+    }
+
+    return true;
+    }
+};
+
+//wrong answer -> 79 cases passed out of 93
+//         ListNode* curr = head;
+//         ListNode* prev = NULL;
+//         ListNode* nextnode = NULL;
+//         while(curr!=NULL){
+//             nextnode = curr->next;
+//             curr->next = prev;
+//             prev = curr;
+//             curr = nextnode;
+//         }
+//         ListNode* reversedList = prev;
+//         while (head) {
+//         if (head->val != reversedList->val) {
+//             return false;
+//         }
+//         head = head->next;
+//         reversedList = reversedList->next;
+//         }
+//         return true;
