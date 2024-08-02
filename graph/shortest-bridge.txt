@@ -1,0 +1,70 @@
+class Solution {
+public:
+    void dfs(vector<vector<int>>& grid, int i, int j, queue<pair<int, int>>& q) {
+        // Boundary and visited check
+        if (i < 0 || i >= grid.size() || j < 0 || j >= grid[0].size() || grid[i][j] != 1) {
+            return;
+        }
+        
+        // Mark the cell as part of the first island
+        grid[i][j] = 2;
+        q.push({i, j});
+        
+        // Explore all four directions
+        dfs(grid, i + 1, j, q);
+        dfs(grid, i - 1, j, q);
+        dfs(grid, i, j + 1, q);
+        dfs(grid, i, j - 1, q);
+    }
+    
+    int shortestBridge(vector<vector<int>>& grid) {
+        queue<pair<int, int>> q;
+        bool found = false;
+        
+        // Step 1: Use DFS to mark the first island and add its coordinates to the queue
+        for (int i = 0; i < grid.size(); i++) {
+            for (int j = 0; j < grid[0].size(); j++) {
+                if (grid[i][j] == 1) {
+                    dfs(grid, i, j, q);
+                    found = true;
+                    break;
+                }
+            }
+            if (found) break;
+        }
+        
+        // Step 2: Use BFS to find the shortest path to the second island
+        int steps = 0;
+        vector<int> directions = {0, 1, 0, -1, 0}; // Helper to move in 4 directions
+        
+        while (!q.empty()) {
+            int qSize = q.size();
+            for (int i = 0; i < qSize; i++) {
+                auto [x, y] = q.front();
+                q.pop();
+                
+                // Explore all four directions
+                for (int d = 0; d < 4; d++) {
+                    int nx = x + directions[d];
+                    int ny = y + directions[d + 1];
+                    
+                    // Boundary check and whether it's part of the second island or water
+                    if (nx >= 0 && ny >= 0 && nx < grid.size() && ny < grid[0].size()) {
+                        if (grid[nx][ny] == 1) {
+                            // Found the second island
+                            return steps;
+                        }
+                        if (grid[nx][ny] == 0) {
+                            // Mark as visited and push to the queue
+                            grid[nx][ny] = 2;
+                            q.push({nx, ny});
+                        }
+                    }
+                }
+            }
+            steps++;
+        }
+        
+        return -1; // This line should never be reached if there's a valid solution
+    }
+};

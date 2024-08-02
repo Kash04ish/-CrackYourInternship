@@ -1,0 +1,123 @@
+//kruskal's algo
+static bool comp(vector<int> &a,vector<int> &b)
+    {
+        return a[2]<b[2];
+    }
+    
+    int findParents(int parent[],int n)
+    {
+        if(parent[n] == n)
+        {
+            return n;
+        }
+        
+        return parent[n] = findParents(parent,parent[n]);
+    }
+    
+    
+    void unionSet(int Rank[],int parent[],int m,int n)
+    {
+        int u = findParents(parent,m);
+        int v = findParents(parent,n);
+        
+        if(Rank[u] < Rank[v])
+        {
+            parent[u] = v;
+            Rank[v]++;
+        }
+        
+        else
+        {
+            parent[v]=u;
+            Rank[u]++;
+        }
+    }
+    
+    
+    int spanningTree(int V, vector<vector<int>> adj[])
+    {
+        int parent[V];
+        int Rank[V];
+        int weight =0;
+        
+        for(int i=0;i<V;i++)
+        {
+            parent[i] =i;
+            Rank[i] = 0;
+        }
+        
+        vector<vector<int>> edges;
+        for(int i =0;i<V;i++)
+        {
+            for(auto nodes:adj[i])
+            {
+                edges.push_back({i,nodes[0],nodes[1]});
+            }
+        }
+        
+        // Sort According to their Weight
+        sort(edges.begin(),edges.end(),comp);
+        
+        
+        for(auto nodes:edges)
+        {
+            int u = findParents(parent,nodes[0]);
+            int v = findParents(parent,nodes[1]);
+            
+            if(u != v)
+            {
+                unionSet(Rank,parent,u,v);
+                weight = weight+nodes[2];
+            }
+        }
+        
+        
+        return weight;
+    }
+	//prims algo
+    // int spanningTree(int V, vector<vector<int>> adj[]) {
+    //     int parent[V];
+    //     bool MST[V] = {false};
+    //     int key[V];
+        
+    //     for(int i = 0; i < V; i++) {
+    //         parent[i] = -1;
+    //         key[i] = INT_MAX;
+    //     }
+        
+    //     key[0] =0;
+        
+    //     for(int j=0;j<V;j++)
+    //     {
+    //         int u,mini = INT_MAX;
+    //         // find Min Value from Key
+    //         for(int i=0;i<V;i++)
+    //         {
+    //             if(key[i]<mini && MST[i] == false) 
+    //             {
+    //                 u =i;
+    //                 mini = key[i];
+    //             }
+    //         }
+            
+    //         MST[u] = true;
+            
+    //         for(auto neighbour:adj[u])
+    //         {
+    //             int node = neighbour[0];
+    //             int dist = neighbour[1];
+    //             if(MST[node] == false && (dist < key[node]))
+    //             {
+    //                 key[node] = dist;
+    //                 parent[node] = u;
+    //             }
+    //         }
+    //     }
+    //     int sum =0;
+    //     for(int i=0;i<V;i++)
+    //     {
+    //         sum = sum+key[i];
+    //     }
+        
+    //     return sum;
+    // }

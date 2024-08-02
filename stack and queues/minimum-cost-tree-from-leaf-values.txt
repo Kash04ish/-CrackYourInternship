@@ -1,0 +1,19 @@
+class Solution {
+public:
+    int mctFromLeafValues(vector<int>& arr) {
+        int res = 0;
+        vector<int> ans = {INT_MAX};
+        for (int a : arr) {
+            while (ans.back() <= a) {
+                int mid = ans.back();
+                ans.pop_back();
+                res += mid * min(ans.back(), a);
+            }
+            ans.push_back(a);
+        }
+        for (int i = 2; i < ans.size(); ++i) {
+            res += ans[i] * ans[i - 1];
+        }
+        return res;
+    }
+};a

@@ -1,0 +1,79 @@
+class Solution {
+  int to_int(string s){
+    int i=0;
+    int ans=0;
+    while(i<s.length()){
+      int x = s[i]-'0';
+      ans*=10;
+      ans+=x;
+      i++;
+    }
+    return ans;
+  }
+  string dfs(string s, int i){
+    string ans="";
+    while(i<s.length()){
+      if(s[i]>'0' and s[i]<='9'){
+        string st;
+        while(s[i]>='0' and s[i]<='9') st.push_back(s[i++]);
+        int tms = to_int(st);
+        string por;
+        stack<char> stk;
+        do{
+          if(s[i]=='[') stk.push(s[i]);
+          else if(s[i]==']') stk.pop();
+          por.push_back(s[i++]);
+        }while(!stk.empty());
+        string out = dfs(por, 0); //recursive call
+        string fin = "";
+        while(tms--) fin += out;
+        ans+=fin;
+      }
+      else if(s[i]>='a' and s[i]<='z') ans+=s[i++];
+      else i++;
+    }
+    return ans;
+  }
+public:
+  string decodeString(string s) {
+    return dfs(s, 0);
+  }
+};
+// class Solution {
+// public:
+//     string decodeString(string s) {
+//         stack<int> countStack;
+//     stack<string> stringStack;
+//     string currentString = "";
+//     int k = 0;
+
+//     for (char c : s) {
+//         if (isdigit(c)) {
+//             k = k * 10 + (c - '0'); // Forming the number (multiplier)
+//         } else if (c == '[') {
+//             // Push current number and current string to stack
+//             countStack.push(k);
+//             stringStack.push(currentString);
+//             // Reset current number and string
+//             k = 0;
+//             currentString = "";
+//         } else if (c == ']') {
+//             // Pop the number and string from stack
+//             int currentCount = countStack.top();
+//             countStack.pop();
+//             string decodedString = stringStack.top();
+//             stringStack.pop();
+//             // Append the decoded string currentCount times
+//             for (int i = 0; i < currentCount; i++) {
+//                 decodedString += currentString;
+//             }
+//             currentString = decodedString;
+//         } else {
+//             // Just add the current character to the current string
+//             currentString += c;
+//         }
+//     }
+
+//     return currentString;
+//     }
+// };
