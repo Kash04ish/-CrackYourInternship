@@ -1,0 +1,23 @@
+void dfs(vector<vector<int>> &mat, int i, int j, vector<string> &ans, string temp){
+        if (i < 0 || i >= mat.size() || j < 0 || j >= mat[0].size() || mat[i][j] == 0){
+            return ;
+        }
+        if(i==mat.size()-1 && j==mat.size()-1){
+            ans.push_back(temp);
+            return;
+        }
+        mat[i][j] = 0;
+        dfs(mat, i-1, j, ans, temp+'U');
+        dfs(mat, i+1, j, ans, temp+'D');
+        dfs(mat, i, j+1, ans, temp+'R');
+        dfs(mat, i, j-1, ans, temp+'L');
+        mat[i][j] = 1;
+        return;
+    }
+    vector<string> findPath(vector<vector<int>> &mat) {
+        vector<string> ans;
+        if(mat[mat.size()-1][mat.size()-1] == 0)  return ans;
+        if(mat[0][0] == 1)  dfs(mat, 0, 0, ans, "");
+        
+        return ans;
+    }
