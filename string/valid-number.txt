@@ -1,0 +1,62 @@
+//wrong ans
+// class Solution {
+// public:
+//     bool isNumber(string s) {
+//         if (s.length() == 1 && s[0] == '.') return false;
+
+//         for (int i = 0; i < s.length(); i++) {
+//             if ((s[i] == 'e' || s[i] == 'E')) {
+//                 if (i == 0 || i == s.length() - 1 || !isdigit(s[i - 1]) || (!isdigit(s[i + 1]) && s[i + 1] != '-' && s[i + 1] != '+')) {
+//                     return false;
+//                 }
+//             }
+//             else if (isalpha(s[i]) && s[i] != 'e' && s[i] != 'E') {
+//                 return false;
+//             }
+//             else if ((s[i] == '.' && (i < s.length() - 1 && s[i + 1] == '.')) ||
+//                      (s[i] == '-' && (i < s.length() - 1 && s[i + 1] == '-')) ||
+//                      (s[i] == '+' && (i < s.length() - 1 && s[i + 1] == '+')) ||
+//                      (s[i] == '-' && (i < s.length() - 1 && s[i + 1] == '+')) ||
+//                      (s[i] == '+' && (i < s.length() - 1 && s[i + 1] == '-'))) {
+//                 return false;
+//             }
+//         }
+
+//         return true;
+//     }
+// };
+class Solution {
+public:
+    bool isNumber(string s) {
+        int i = 0;
+        int n = s.length();
+
+        while (i < n && isspace(s[i])) i++;
+        if (i < n && (s[i] == '+' || s[i] == '-')) i++;
+
+        bool isNumeric = false;
+        while (i < n && isdigit(s[i])) {
+            i++;
+            isNumeric = true;
+        }
+        if (i < n && s[i] == '.') {
+            i++;
+            while (i < n && isdigit(s[i])) {
+                i++;
+                isNumeric = true;
+            }
+        }
+        if (isNumeric && i < n && (s[i] == 'e' || s[i] == 'E')) {
+            i++;
+            isNumeric = false;
+            if (i < n && (s[i] == '+' || s[i] == '-')) i++;
+            while (i < n && isdigit(s[i])) {
+                i++;
+                isNumeric = true;
+            }
+        }
+        while (i < n && isspace(s[i])) i++;
+
+        return isNumeric && i == n;            
+    }
+};

@@ -1,0 +1,16 @@
+long long multiplyTwoLists(Node *first, Node *second) {
+        long long val1 = 0, val2 = 0;
+        long long N = 1000000007;
+        
+        while (first) {
+            val1 = (val1 * 10 + first->data) % N;
+            first = first->next;
+        }
+        
+        while (second) {
+            val2 = (val2 * 10 + second->data) % N;
+            second = second->next;
+        }
+        
+        return (val1 * val2) % N;
+    }

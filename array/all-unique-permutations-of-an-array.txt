@@ -1,0 +1,27 @@
+void generatePermutation(vector<int>& temp, vector<int>& arr, vector<vector<int>>& ans, vector<int>& vis, int n) {
+        if(temp.size() == n) {
+            ans.push_back(temp);
+            return;
+        }
+        for(int i = 0; i < n; i++) {
+            if(!vis[i]) {
+                if(i > 0 && arr[i] == arr[i - 1] && !vis[i - 1]) {
+                    continue;  // Skip duplicates
+                }
+                temp.push_back(arr[i]);
+                vis[i] = 1;
+                generatePermutation(temp, arr, ans, vis, n);
+                vis[i] = 0;
+                temp.pop_back();
+            }
+        }
+    }
+    
+    vector<vector<int>> uniquePerms(vector<int>& arr, int n) {
+        sort(arr.begin(), arr.end());  
+        vector<vector<int>> ans;
+        vector<int> temp;
+        vector<int> vis(n, 0); 
+        generatePermutation(temp, arr, ans, vis, n);
+        return ans;
+    }
